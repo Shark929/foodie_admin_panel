@@ -72,6 +72,9 @@ class _VendorPageState extends State<VendorPage> {
                               );
                             },
                             child: VendorComponent(
+                              color: snapshot.data!.docs[index]['code'] == "0"
+                                  ? const Color.fromARGB(255, 200, 97, 90)
+                                  : const Color.fromARGB(255, 24, 148, 80),
                               deleteFunc: () {
                                 snapshot.data!.docs[index].reference.delete();
                               },
@@ -181,10 +184,20 @@ class _VendorPageState extends State<VendorPage> {
                                               )),
                                         ));
                               },
+                              blockLabel:
+                                  snapshot.data!.docs[index]['code'] == "0"
+                                      ? "Unblock"
+                                      : "Block",
                               blockFunc: () {
-                                snapshot.data!.docs[index].reference.update({
-                                  "code": "0",
-                                });
+                                if (snapshot.data!.docs[index]['code'] == "0") {
+                                  snapshot.data!.docs[index].reference.update({
+                                    "code": "2",
+                                  });
+                                } else {
+                                  snapshot.data!.docs[index].reference.update({
+                                    "code": "0",
+                                  });
+                                }
                               },
                               restaurant: snapshot.data!.docs[index]
                                   ['restaurant'],

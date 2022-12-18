@@ -3,6 +3,8 @@ import 'package:foodie_admin_panel/components/button_component.dart';
 
 class VendorComponent extends StatelessWidget {
   final String? restaurant, mall, location, email, unitNo;
+  final String blockLabel;
+  final Color color;
 
   final Function()? blockFunc, deleteFunc, editFunc;
   const VendorComponent(
@@ -14,7 +16,9 @@ class VendorComponent extends StatelessWidget {
       this.unitNo,
       this.deleteFunc,
       this.editFunc,
-      this.blockFunc});
+      this.blockFunc,
+      required this.color,
+      required this.blockLabel});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +27,8 @@ class VendorComponent extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       width: MediaQuery.of(context).size.width,
       height: 150,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8), color: Colors.blueGrey),
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(8), color: color),
       child: Row(
         children: [
           Row(
@@ -101,7 +105,7 @@ class VendorComponent extends StatelessWidget {
                 width: 16,
               ),
               ButtonComponent(
-                label: "Block",
+                label: blockLabel,
                 color: Colors.orange,
                 onTap: blockFunc,
               ),

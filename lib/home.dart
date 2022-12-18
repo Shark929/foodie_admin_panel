@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:foodie_admin_panel/pages/category_page.dart';
 import 'package:foodie_admin_panel/pages/home_page.dart';
 import 'package:foodie_admin_panel/pages/notification_page.dart';
+import 'package:foodie_admin_panel/pages/promo_page.dart';
 import 'package:foodie_admin_panel/pages/user_page.dart';
 import 'package:foodie_admin_panel/pages/vendor_page.dart';
 
@@ -15,8 +17,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool isUserNav = false;
   bool isVendorNav = false;
-  bool isLocationNav = false;
-  bool isSalesNav = false;
+  bool isCategoryNav = false;
+  bool isPromoNav = false;
   bool isNotificationNav = false;
   bool isHomeNav = true;
 
@@ -48,8 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           isNotificationNav = false;
                           isUserNav = false;
                           isVendorNav = false;
-                          isLocationNav = false;
-                          isSalesNav = false;
+                          isCategoryNav = false;
+                          isPromoNav = false;
                         });
                       },
                       child: Row(
@@ -91,8 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           isNotificationNav = true;
                           isUserNav = false;
                           isVendorNav = false;
-                          isLocationNav = false;
-                          isSalesNav = false;
+                          isCategoryNav = false;
+                          isPromoNav = false;
                           isHomeNav = false;
                         });
                       },
@@ -158,8 +160,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           isNotificationNav = false;
                           isUserNav = true;
                           isVendorNav = false;
-                          isLocationNav = false;
-                          isSalesNav = false;
+                          isCategoryNav = false;
+                          isPromoNav = false;
                         });
                       },
                       child: Container(
@@ -190,8 +192,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           isNotificationNav = false;
                           isUserNav = false;
                           isVendorNav = true;
-                          isLocationNav = false;
-                          isSalesNav = false;
+                          isCategoryNav = false;
+                          isPromoNav = false;
                         });
                       },
                       child: Container(
@@ -204,6 +206,70 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         child: const Text(
                           "Vendors",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    //promo
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          isHomeNav = false;
+                          isNotificationNav = false;
+                          isUserNav = false;
+                          isVendorNav = false;
+                          isCategoryNav = false;
+                          isPromoNav = true;
+                        });
+                      },
+                      child: Container(
+                        width: 250,
+                        height: 80,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.amberAccent,
+                        ),
+                        child: const Text(
+                          "Promo",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    //Categort
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          isHomeNav = false;
+                          isNotificationNav = false;
+                          isUserNav = false;
+                          isVendorNav = false;
+                          isCategoryNav = true;
+                          isPromoNav = false;
+                        });
+                      },
+                      child: Container(
+                        width: 250,
+                        height: 80,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.amberAccent,
+                        ),
+                        child: const Text(
+                          "Food Category",
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 18,
@@ -225,7 +291,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             ? const UserPage()
                             : isVendorNav
                                 ? const VendorPage()
-                                : Container()),
+                                : isPromoNav
+                                    ? const PromoPage()
+                                    : isCategoryNav
+                                        ? const CategoryPage()
+                                        : Container()),
           ],
         ),
       ),

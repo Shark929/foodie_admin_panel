@@ -93,6 +93,8 @@ class _NotificationPageState extends State<NotificationPage> {
                                   FirebaseFirestore.instance
                                       .collection("Vendor")
                                       .add({
+                                    "image":
+                                        "https://i.picsum.photos/id/57/2448/3264.jpg?hmac=ewraXYesC6HuSEAJsg3Q80bXd1GyJTxekI05Xt9YjfQ",
                                     "password": data['password'],
                                     "restaurant": data['restaurant'],
                                     "location": data['location'],

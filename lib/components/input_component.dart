@@ -17,6 +17,7 @@ class InputComponent extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: TextField(
+        onChanged: (value) {},
         obscureText: obscureText ?? false,
         controller: controller,
         decoration: InputDecoration(

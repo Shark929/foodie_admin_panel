@@ -24,6 +24,10 @@ class VendorProfilePage extends StatefulWidget {
 class _VendorProfilePageState extends State<VendorProfilePage> {
   TextEditingController foodNameController = TextEditingController();
   TextEditingController foodPriceController = TextEditingController();
+  TextEditingController foodCategoryController = TextEditingController();
+  TextEditingController foodCodeController = TextEditingController();
+  TextEditingController foodDescriptionController = TextEditingController();
+
   CollectionReference menuRef = FirebaseFirestore.instance.collection("Menu");
   ImagePicker imagePicker = ImagePicker();
   XFile? file;
@@ -123,8 +127,6 @@ class _VendorProfilePageState extends State<VendorProfilePage> {
                         context: context,
                         builder: (context) => Dialog(
                               child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height - 400,
                                   width:
                                       MediaQuery.of(context).size.width - 400,
                                   padding: const EdgeInsets.symmetric(
@@ -145,6 +147,18 @@ class _VendorProfilePageState extends State<VendorProfilePage> {
                                         hintText: "Food name",
                                       ),
                                       InputComponent(
+                                        controller: foodDescriptionController,
+                                        hintText: "Food description",
+                                      ),
+                                      InputComponent(
+                                        controller: foodCategoryController,
+                                        hintText: "Food category",
+                                      ),
+                                      InputComponent(
+                                        controller: foodCodeController,
+                                        hintText: "Food code",
+                                      ),
+                                      InputComponent(
                                         controller: foodPriceController,
                                         hintText: "Food price",
                                       ),
@@ -163,13 +177,21 @@ class _VendorProfilePageState extends State<VendorProfilePage> {
                                         label: "Save",
                                         onTap: () {
                                           FirebaseFirestore.instance
-                                              .collection("Menu")
+                                              .collection("Restaurants")
                                               .add({
+                                            "code": "1",
                                             "food_name":
                                                 foodNameController.text,
+                                            "food_category":
+                                                foodCategoryController.text,
+                                            "food_code":
+                                                foodCodeController.text,
+                                            "food_description":
+                                                foodDescriptionController.text,
                                             "price": foodPriceController.text,
                                             "location": widget.location,
-                                            // "image": imageUrl,
+                                            "image":
+                                                "https://i.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g",
                                             "email": widget.email,
                                             "mall": widget.mall,
                                           }).then((value) {
@@ -195,7 +217,9 @@ class _VendorProfilePageState extends State<VendorProfilePage> {
                   ),
                 )),
             StreamBuilder<QuerySnapshot>(
-                stream: menuRef.snapshots(),
+                stream: FirebaseFirestore.instance
+                    .collection("Restaurants")
+                    .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -213,9 +237,129 @@ class _VendorProfilePageState extends State<VendorProfilePage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16.0),
                               child: MenuComponent(
+                                deleteFunc: () {
+                                  snapshot.data!.docs[index].reference
+                                      .delete()
+                                      .whenComplete(
+                                        () => Navigator.pop(context),
+                                      );
+                                },
+                                editFunc: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => Dialog(
+                                            child: Container(
+                                              width: 500,
+                                              height: 400,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 8),
+                                              child: Column(children: [
+                                                const SizedBox(
+                                                  height: 16,
+                                                ),
+                                                const Text(
+                                                  "Edit Menu",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                TextField(
+                                                  controller:
+                                                      foodNameController,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                          hintText:
+                                                              "Food Name "),
+                                                ),
+                                                TextField(
+                                                  controller:
+                                                      foodPriceController,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                          hintText: "RM 0.00"),
+                                                ),
+                                                TextField(
+                                                  controller:
+                                                      foodCategoryController,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                          hintText: "Category"),
+                                                ),
+                                                const SizedBox(
+                                                  height: 30,
+                                                ),
+                                                ButtonComponent(
+                                                  label: "Update",
+                                                  onTap: () {
+                                                    if (foodCategoryController.text.isEmpty ||
+                                                        foodCategoryController
+                                                            .text.isEmpty ||
+                                                        foodCategoryController
+                                                            .text.isEmpty) {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder:
+                                                              (context) =>
+                                                                  Dialog(
+                                                                    child:
+                                                                        Container(
+                                                                      padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                          horizontal:
+                                                                              16,
+                                                                          vertical:
+                                                                              8),
+                                                                      height:
+                                                                          50,
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      color: Colors
+                                                                          .red,
+                                                                      child:
+                                                                          const Text(
+                                                                        "All field must be filled",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                16,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                            color: Colors.white),
+                                                                      ),
+                                                                    ),
+                                                                  ));
+                                                    } else {
+                                                      snapshot.data!.docs[index]
+                                                          .reference
+                                                          .update({
+                                                        "food_name":
+                                                            foodNameController
+                                                                .text,
+                                                        "food_category":
+                                                            foodCategoryController
+                                                                .text,
+                                                        "price": double.parse(
+                                                                foodPriceController
+                                                                    .text)
+                                                            .toStringAsFixed(2),
+                                                      }).then((value) =>
+                                                              Navigator.pop(
+                                                                  context));
+                                                    }
+                                                  },
+                                                )
+                                              ]),
+                                            ),
+                                          ));
+                                },
+                                image: snapshot.data!.docs[index]['image'],
                                 foodName: snapshot.data!.docs[index]
                                     ['food_name'],
-                                foodPrice: snapshot.data!.docs[index]['price'],
+                                foodPrice:
+                                    "RM ${snapshot.data!.docs[index]['price']}",
                               ),
                             );
                           }
